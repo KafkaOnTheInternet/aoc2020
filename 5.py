@@ -1,39 +1,14 @@
 import fileinput
-ans = -1 
+mx, mn = -1, 10e5
+sub = {'B':'1', 'F':'0', 'R':'1', 'L':'0'}
 ids = set()
-ids_last = set()
 for line in fileinput.input():
-    row, col = 0, 0
-    lo, hi, mid = 0, 127, -1
-    for c in line[:7]:
-        if c == 'F':
-            mid = (hi + lo) // 2
-            hi = mid
-        else:
-            mid = (hi + lo) // 2
-            lo = mid + 1
-    row = lo 
-    lo, hi, mid = 0, 7, -1
-    for c in line[7:]:
-        if c == 'R':
-            mid = (hi + lo) // 2
-            lo = mid + 1
-        else:
-            mid = (hi + lo) // 2
-            hi = mid
-    col = lo
-    ans = max(ans, row*8 + col)
-    if row == 0 or row == 127:
-        ids_last.add(row*8 + col)
-    else:
-        ids.add(row*8 + col)
-print(ans)
-mn, mx = min(ids), max(ids)
-for i in range(mn+1, mx):
-    if i not in ids_last and i not in ids:
-        print(i)
-        break
-
-
+    val = int(''.join([sub[i] for i in line.strip()]), 2)
+    mx = max(mx, val)
+    mn = min(mn, val)
+    ids.add(val)
+print(f'P1: {mx}')
+ans = set(list(range(mn, mx+1))) - ids
+print(f'P2: {ans}')
 
 
